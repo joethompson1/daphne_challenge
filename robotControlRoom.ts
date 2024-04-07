@@ -56,15 +56,15 @@ export function processInput(fileContent: string) {
 
 // Check if the script is being run directly
 if (!module.parent) {
-  if (process.argv.length < 3) {
-    console.error('Please provide the file path as a command-line argument.');
-    process.exit(1);
-  }
+  	if (process.argv.length < 3) {
+    	console.error('Please provide the file path as a command-line argument.');
+    	process.exit(1);
+  	}
 
-  const inputFilePath = process.argv[2];
-  const fileContent = fs.readFileSync(inputFilePath, 'utf-8');
-  const results: RobotResult[] = processInput(fileContent);
-  for (const robot of results) {
+  	const inputFilePath = process.argv[2];
+  	const fileContent = fs.readFileSync(inputFilePath, 'utf-8');
+  	const results: RobotResult[] = processInput(fileContent);
+  	for (const robot of results) {
 		console.log(robot.position[0], robot.position[1], robot.direction, (!robot.alive ? 'Lost': ''));
 	}
 }
