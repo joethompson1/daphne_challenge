@@ -1,9 +1,7 @@
 export class MartianCell {
 	robotGrave: boolean;
-	edgeCell: boolean;
 
-	constructor(isEdgeCell: boolean) {
-		this.edgeCell = isEdgeCell;
+	constructor() {
 		this.robotGrave = false;
 	}
 

@@ -17,7 +17,7 @@ export class Robot {
 	// Turning left or right essentially acts like a circular queue
 	turnLeft() {
 		this.directionIndex = this.directionIndex - 1;
-		// so if turning left and its at N then we need to move to end of queue
+		// so if turning left and directions is at N then we need to move to end of queue
 		if (this.directionIndex < 0) {
 			this.directionIndex = this.directions.length - 1;
 		}
@@ -36,60 +36,29 @@ export class Robot {
 	moveForward(mars: MarsMatrix) {
 		const maxX: number = mars.maxX;
 		const maxY: number = mars.maxY;
+		const [x, y] = this.position;
+		const robotGrave: boolean = mars.grid[y][x].robotGrave;
 
-		const robotGrave: boolean = mars.grid[this.position[1]][this.position[0]].robotGrave
+		// works out the new position after moving forward given robots direction
+		const newPositions: { [key: string]: [number, number] } = {
+			N: [x, y + 1],
+			E: [x + 1, y],
+			S: [x, y - 1],
+			W: [x - 1, y]
+		}
 
-		switch(this.direction) {
-			case 'N':
-				this.position[1] += 1;
-				// checks if robot is over boundry of the map and if its a robots grave
-				// if its not then make the move
-				if (this.position[1] > maxY) {
-					this.position[1] -= 1;
+		const newPosition = newPositions[this.direction];
+		const [newX, newY] = newPosition;
 
-					if (!robotGrave) {
-						this.alive = false;
-						mars.grid[this.position[1]][this.position[0]].robotGrave = true;
-					}
-					return;
-				}
-				break;
-			case 'E':
-				this.position[0] += 1;
-				if (this.position[0] > maxX) {
-					this.position[0] -= 1;
-
-					if (!robotGrave) {
-						this.alive = false;
-						mars.grid[this.position[1]][this.position[0]].robotGrave = true;
-					}
-					return;
-				}
-				break;
-			case 'S':
-				this.position[1] -= 1;
-				if (this.position[1] < 0) {
-					this.position[1] += 1;
-
-					if (!robotGrave) {
-						this.alive = false;
-						mars.grid[this.position[1]][this.position[0]].robotGrave = true;
-					}
-					return;
-				}
-				break;
-			case 'W':
-				this.position[0] -= 1;
-				if (this.position[0] < 0) {
-					this.position[0] += 1;
-
-					if (!robotGrave) {
-						this.alive = false;
-						mars.grid[this.position[1]][this.position[0]].robotGrave = true;
-					} 
-					return;
-				}
-				break;
+		// checks if the newPosition is outside boundary of Mars grid
+		if (newY < 0 || newY > maxY || newX < 0 || newX > maxX) {
+			// if exceeds boundary and no grave then kill robot and bury
+			if (!robotGrave) {
+				this.alive = false;
+				mars.grid[y][x].buryRobot();
+			}
+		} else {
+			this.position = newPosition;
 		}
 	}
 }
