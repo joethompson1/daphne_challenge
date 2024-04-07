@@ -60,7 +60,7 @@ function processInput(fileContent) {
         const startX = Number(startXString);
         const startY = Number(startYString);
         // Validate start position
-        if (startX < 0 || startX >= gridX || startY < 0 || startY >= gridY) {
+        if (startX < 0 || startX > gridX || startY < 0 || startY > gridY) {
             throw new Error('Robot start position is outside the grid boundaries.');
         }
         const robot = new Robot_1.Robot([startX, startY], startDirection);
